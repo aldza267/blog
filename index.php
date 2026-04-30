@@ -53,7 +53,7 @@
   .modal { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:28px; width:500px; max-width:95vw; max-height:90vh; overflow-y:auto; }
   .modal h3 { font-size:1.1rem; margin-bottom:20px; color:var(--accent); }
   .form-group { margin-bottom:14px; }
-  .form-group label { display:block; font-size:.82rem; color:var(--muted); margin-bottom:5px; }
+  .form-group label { display:block; font-size:.82rem; color:#fff; color:var(--muted); margin-bottom:5px; }
   .form-group input, .form-group select, .form-group textarea {
     width:100%; background:var(--surface); border:1px solid var(--border); border-radius:8px;
     color:var(--text); padding:9px 12px; font-size:.88rem; font-family:inherit; outline:none; transition:.2s;
@@ -197,22 +197,67 @@ function closeModal() {
 function buildFormFields(data = {}) {
   const c = document.getElementById('form-fields');
   if (currentMenu === 'penulis') {
-    c.innerHTML = `
-      <div class="form-group"><label>Nama</label><input name="nama" value="${data.nama||''}" required></div>
-      <div class="form-group"><label>Email</label><input type="email" name="email" value="${data.email||''}" required></div>
-      <div class="form-group"><label>Password ${editId?'(kosongkan jika tidak diubah)':''}</label><input type="password" name="password" ${editId?'':'required'}></div>
-      <div class="form-group"><label>Foto (maks 2MB)</label><input type="file" name="foto" accept="image/*"></div>`;
-  } else if (currentMenu === 'kategori') {
-    c.innerHTML = `<div class="form-group"><label>Nama Kategori</label><input name="nama_kategori" value="${data.nama_kategori||''}" required></div>`;
-  } else {
-    c.innerHTML = `
-      <div class="form-group"><label>Judul</label><input name="judul" value="${data.judul||''}" required></div>
-      <div class="form-group"><label>Isi Artikel</label><textarea name="isi" required>${data.isi||''}</textarea></div>
-      <div class="form-group"><label>Penulis</label><select name="id_penulis" id="sel-penulis" required><option value="">-- Pilih Penulis --</option></select></div>
-      <div class="form-group"><label>Kategori</label><select name="id_kategori" id="sel-kategori" required><option value="">-- Pilih Kategori --</option></select></div>
-      <div class="form-group"><label>Gambar ${editId?'(kosongkan jika tidak diubah)':'(wajib, maks 2MB)'}</label><input type="file" name="gambar" accept="image/*" ${editId?'':'required'}></div>`;
-    loadDropdowns(data);
-  }
+  c.innerHTML = `
+    <div class="form-group">
+      <label style="color:white;">Nama</label>
+      <input name="nama" placeholder="Masukkan nama" value="${data.nama||''}" required>
+    </div>
+
+    <div class="form-group">
+      <label style="color:white;">Email</label>
+      <input type="email" name="email" placeholder="Masukkan email" value="${data.email||''}" required>
+    </div>
+
+    <div class="form-group">
+      <label style="color:white;">Password ${editId?'(kosongkan jika tidak diubah)':''}</label>
+      <input type="password" name="password" placeholder="Masukkan password" ${editId?'':'required'}>
+    </div>
+
+    <div class="form-group">
+      <label style="color:white;">Foto (maks 2MB)</label>
+      <input type="file" name="foto" accept="image/*">
+    </div>
+  `;
+} else if (currentMenu === 'kategori') {
+  c.innerHTML = `
+    <div class="form-group">
+      <label style="color:white;">Nama Kategori</label>
+      <input name="nama_kategori" placeholder="Masukkan kategori" value="${data.nama_kategori||''}" required>
+    </div>
+  `;
+} else {
+  c.innerHTML = `
+    <div class="form-group">
+      <label style="color:white;">Judul</label>
+      <input name="judul" placeholder="Masukkan judul" value="${data.judul||''}" required>
+    </div>
+
+    <div class="form-group">
+      <label style="color:white;">Isi Artikel</label>
+      <textarea name="isi" placeholder="Tulis isi artikel..." required>${data.isi||''}</textarea>
+    </div>
+
+    <div class="form-group">
+      <label style="color:white;">Penulis</label>
+      <select name="id_penulis" id="sel-penulis" required>
+        <option value="">-- Pilih Penulis --</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label style="color:white;">Kategori</label>
+      <select name="id_kategori" id="sel-kategori" required>
+        <option value="">-- Pilih Kategori --</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label style="color:white;">Gambar</label>
+      <input type="file" name="gambar">
+    </div>
+  `;
+  loadDropdowns(data);
+}
 }
 
 async function loadDropdowns(data = {}) {
