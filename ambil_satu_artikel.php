@@ -1,7 +1,14 @@
 <?php
-// ambil_artikel.php - Mengambil semua data artikel dengan JOIN ke penulis dan kategori
+// ambil_satu_artikel.php - Mengambil satu data artikel berdasarkan ID
 header('Content-Type: application/json');
 require_once 'koneksi.php';
+
+$id = intval($_GET['id'] ?? 0);
+
+if ($id <= 0) {
+    echo json_encode(['status' => 'error', 'message' => 'ID tidak valid.']);
+    exit;
+}
 
 $sql = "SELECT 
             a.id,
@@ -16,17 +23,19 @@ $sql = "SELECT
         FROM artikel a
         LEFT JOIN penulis p ON a.id_penulis = p.id
         LEFT JOIN kategori k ON a.id_kategori = k.id
-        ORDER BY a.id DESC";
+        WHERE a.id = ?";
 
 $stmt = $conn->prepare($sql);
+$stmt->bind_param('i', $id);
 $stmt->execute();
 $result = $stmt->get_result();
 
-$data = [];
-while ($row = $result->fetch_assoc()) {
-    $data[] = $row;
+if ($result->num_rows === 0) {
+    echo json_encode(['status' => 'error', 'message' => 'Artikel tidak ditemukan.']);
+    exit;
 }
 
+$data = $result->fetch_assoc();
 $stmt->close();
 $conn->close();
 
