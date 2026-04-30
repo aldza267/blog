@@ -1,2 +1,0 @@
-# Blog CMS
-Blog CMS
